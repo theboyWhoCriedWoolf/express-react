@@ -1,0 +1,9 @@
+{
+    "processors": [],
+    "extends": [
+        "stylelint-config-recommended"
+    ],
+   "rules": {
+       "rule-empty-line-before": ["always", {"except":  ["inside-block"] }]
+   }
+}
