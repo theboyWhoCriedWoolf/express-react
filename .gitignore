@@ -1,9 +1,16 @@
 # Don't check auto-generated stuff into git
-coverage
-build
-node_modules
-flow-typed
-stats.json
+
+#################
+## Directories
+#################
+coverage/
+build/
+dev/
+cms/core/config/
+node_modules/
+
+#temp dir
+www/
 
 # Cruft
 .DS_Store
@@ -12,8 +19,12 @@ npm-debug.log
 *.log
 .tmp
 
+flow-typed
+stats.json
+
 #ide
 .vscode
 
-#temp dir
-www
+
+
+
