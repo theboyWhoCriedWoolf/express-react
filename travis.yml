@@ -1,0 +1,17 @@
+language: node_js
+dist: trusty
+sudo: required
+branches:
+  only: master
+node_js:
+  - 8
+script:
+  - node --version
+  - yarn --version
+  - yarn build
+  - yarn test
+cache:
+  yarn: true
+  bundler: true
+  directories:
+    - node_modules

@@ -16,6 +16,7 @@
 /config/*
 
 [include]
+flow-typed
 
 [libs]
 
@@ -23,7 +24,7 @@
 
 [options]
 module.system.node.resolve_dirname=node_modules
-module.system.node.resolve_dirname=src
+module.system.node.resolve_dirname=server
 esproposal.class_static_fields=enable
 esproposal.class_instance_fields=enable
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

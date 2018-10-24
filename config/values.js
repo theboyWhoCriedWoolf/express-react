@@ -5,6 +5,7 @@ module.exports = {
   port: number('PORT', 3000),
   // The host on which the server should run.
   host: string('HOST', 'localhost'),
+  clientDevServerPort: number('CLIENT_DEV_PORT', 7331),
   browserCacheMaxAge: '365d',
   correlationHeader: string('CORRELATION_HEADER', 'x-request-id'),
   sslCertificates: {},
