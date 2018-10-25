@@ -4,15 +4,16 @@
 ## Directories
 #################
 coverage/
-build/
 dev/
 cms/core/config/
 node_modules/
 flow-typed/
 flow-typed
+iinternals/scripts
 
 #temp dir
 www/
+build/
 
 # Cruft
 .DS_Store
@@ -23,10 +24,10 @@ npm-debug.log
 
 flow-typed
 stats.json
+yarn.lock
+package.json
 
 #ide
 .vscode
-
-
 
 
