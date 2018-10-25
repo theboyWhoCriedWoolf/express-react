@@ -8,6 +8,8 @@ build/
 dev/
 cms/core/config/
 node_modules/
+flow-typed/
+flow-typed
 
 #temp dir
 www/
