@@ -25,8 +25,6 @@ async function start() {
 
   const { server, https } = createServer(app, config.get('slCertificates'));
 
-  log.info('-------- ehllo world ');
-
   // Start your app.
   server.listen(port, host, async (err: Error) => {
     if (err) {

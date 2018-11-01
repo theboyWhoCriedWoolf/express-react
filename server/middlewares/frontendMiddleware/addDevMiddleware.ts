@@ -6,8 +6,6 @@ import { log } from '../../utils';
 import config from '../../../config';
 
 export default function addDevMiddleware(app: Application) {
-  console.log('-------- creating the proxy ---------');
-
   const origin: string = '/';
   const target: string = `http://${config.get('host')}:${config.get('clientDevServerPort')}`;
 

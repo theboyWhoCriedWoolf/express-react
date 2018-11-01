@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-import initialisePublicPaths from './middlewares/publicPaths';
+import initialisePublicPaths from './middlewares/publicAssetPaths';
 import initialiseGlobalMiddleware from './middlewares';
 import initialiseRoutes from './routes';
 import initialiseFrontEnd from './middlewares/frontendMiddleware';
