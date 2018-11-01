@@ -4,14 +4,7 @@ const prettierOptions = JSON.parse(fs.readFileSync('./.prettierrc', 'utf8'));
 
 module.exports = {
   parser: 'babel-eslint',
-  extends: [
-    'airbnb',
-    'prettier',
-    'prettier/react',
-    'plugin:security/recommended',
-    'plugin:flowtype/recommended',
-  ],
-
+  extends: ['airbnb', 'prettier', 'prettier/react', 'plugin:flowtype/recommended'],
   plugins: ['prettier', 'react', 'jsx-a11y', 'security', 'flowtype'],
 
   env: {

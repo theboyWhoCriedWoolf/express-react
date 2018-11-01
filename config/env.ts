@@ -1,38 +1,45 @@
-"use strict";
-exports.__esModule = true;
 /* eslint-disable */
-var fs = require("fs");
-var path = require("path");
-var helpers_1 = require("./helpers");
-var dotenv = helpers_1.resolveApp('.env');
-var NODE_ENV = process.env.NODE_ENV;
+import * as fs from 'fs';
+import * as path from 'path';
+import { resolveApp } from './helpers';
+
+const dotenv = resolveApp('.env');
+
+const { NODE_ENV } = process.env;
 if (!NODE_ENV) {
-    throw new Error('The NODE_ENV environment variable is required but was not specified. V1');
+  throw new Error('The NODE_ENV environment variable is required but was not specified. V1');
 }
+
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 // tslint:disable-next-line:prefer-array-literal
-var dotenvFiles = [
-    dotenv + "." + NODE_ENV + ".local",
-    dotenv + "." + NODE_ENV,
-    // Don't include `.env.local` for `test` environment
-    // since normally you expect tests to produce the same
-    // results for everyone
-    NODE_ENV !== 'test' && dotenv + ".local",
-    dotenv,
+const dotenvFiles: Array<string | boolean> = [
+  `${dotenv}.${NODE_ENV}.local`,
+  `${dotenv}.${NODE_ENV}`,
+  // Don't include `.env.local` for `test` environment
+  // since normally you expect tests to produce the same
+  // results for everyone
+  NODE_ENV !== 'test' && `${dotenv}.local`,
+  dotenv,
 ].filter(Boolean);
+
 // Load environment variables from .env* files. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.  Variable expansion is supported in .env files.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
-dotenvFiles.forEach(function (dotenvFile) {
+dotenvFiles.forEach(
+  (dotenvFile: any): void => {
     // tslint:disable-next-line:tsr-detect-non-literal-fs-filename
     if (fs.existsSync(dotenvFile)) {
-        require('dotenv-expand')(require('dotenv').config({
-            path: dotenvFile
-        }));
+      require('dotenv-expand')(
+        require('dotenv').config({
+          path: dotenvFile,
+        }),
+      );
     }
-});
+  },
+);
+
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebook/create-react-app/issues/253.
@@ -43,22 +50,27 @@ dotenvFiles.forEach(function (dotenvFile) {
 // https://github.com/facebook/create-react-app/issues/1023#issuecomment-265344421
 // We also resolve them to make sure all tools using them work consistently.
 // tslint:disable-next-line:tsr-detect-non-literal-fs-filename
-var appDirectory = fs.realpathSync(process.cwd());
+const appDirectory = fs.realpathSync(process.cwd());
 process.env.NODE_PATH = (process.env.NODE_PATH || '')
-    .split(path.delimiter)
-    .filter(function (folder) { return folder && !path.isAbsolute(folder); })
-    .map(function (folder) { return path.resolve(appDirectory, folder); })
-    .join(path.delimiter);
+  .split(path.delimiter)
+  .filter(folder => folder && !path.isAbsolute(folder))
+  .map(folder => path.resolve(appDirectory, folder))
+  .join(path.delimiter);
+
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
-var REACT_APP = /^REACT_APP_/i;
-function getClientEnvironment(publicUrl) {
-    var raw = Object.keys(process.env)
-        .filter(function (key) { return REACT_APP.test(key); })
-        .reduce(function (env, key) {
+const REACT_APP = /^REACT_APP_/i;
+
+function getClientEnvironment(publicUrl: string): { raw: any; stringified: string } {
+  const raw: any = Object.keys(process.env)
+    .filter((key: string) => REACT_APP.test(key))
+    .reduce(
+      (env: any, key: string) => {
         env[key] = process.env[key];
+
         return env;
-    }, {
+      },
+      {
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',
@@ -66,15 +78,19 @@ function getClientEnvironment(publicUrl) {
         // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
         // This should only be used as an escape hatch. Normally you would put
         // images into the `src` and `import` them in code to get their paths.
-        PUBLIC_URL: publicUrl
-    });
-    // Stringify all values so we can feed into Webpack DefinePlugin
-    var stringified = {
-        'process.env': Object.keys(raw).reduce(function (env, key) {
-            env[key] = JSON.stringify(raw[key]);
-            return env;
-        }, {})
-    };
-    return { raw: raw, stringified: stringified };
+        PUBLIC_URL: publicUrl,
+      },
+    );
+  // Stringify all values so we can feed into Webpack DefinePlugin
+  const stringified: any = {
+    'process.env': Object.keys(raw).reduce((env: any, key: string) => {
+      env[key] = JSON.stringify(raw[key]);
+
+      return env;
+    }, {}),
+  };
+
+  return { raw, stringified };
 }
+
 module.exports = getClientEnvironment;

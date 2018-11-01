@@ -1,29 +1,30 @@
-// @flow
-
-/* eslint security/detect-non-literal-fs-filename:0 no-console:0 */
-import fs from 'fs';
-import http from 'http';
-import https from 'https';
-import type { $Application } from 'express';
+import * as express from 'express';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 import chalk from 'chalk';
 
-import type { ConnectOptions, Certificates, NodeServer } from './types';
+import { EMPTY_OBJECT } from '../utils';
+import { ICertOptions, ICreateServer } from './types';
 
 export default function createServer(
-  app: $Application,
-  { serverKey, serverCert, clientCert }: Certificates = {},
-): $ReadOnly<NodeServer> {
+  app: express.Application,
+  { serverKey, serverCert, clientCert }: ICertOptions = EMPTY_OBJECT,
+): ICreateServer {
   // create cert configuration
-  const certs: ConnectOptions = {
+  const certs: https.ServerOptions = {
     key: safeAdd(serverKey),
     cert: safeAdd(serverCert),
-    cs: safeAdd(clientCert),
+    ca: safeAdd(clientCert),
+    requestCert: false,
+    rejectUnauthorized: false,
   };
 
   if (certs.key && certs.cert) {
-    certs.requestCert = Boolean(certs.cs);
-    certs.rejectUnauthorized = Boolean(certs.cs);
+    certs.requestCert = Boolean(certs.ca);
+    certs.rejectUnauthorized = Boolean(certs.ca);
 
+    // tslint:disable-next-line:no-console
     console.log(
       chalk.cyan(
         `Creating ${chalk.bold(' HTTPS ')} server. \n ${
@@ -50,9 +51,10 @@ export default function createServer(
   };
 }
 
-function safeAdd(path?: string = ''): ?string {
+function safeAdd(path: string = ''): string | undefined {
   try {
-    return fs.existsSync(path) ? String(fs.readFileSync(path)) : null;
+    // tslint:disable-next-line:tsr-detect-non-literal-fs-filename
+    return fs.existsSync(path) ? String(fs.readFileSync(path)) : undefined;
   } catch (error) {
     // throw error if something went wrong
     throw new Error(error);

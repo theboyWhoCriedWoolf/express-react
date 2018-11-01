@@ -1,6 +1,6 @@
-// @flow
+// tslint:disable-next-line:import-name
 import createError from 'http-errors';
-import type { $Request, $Response, NextFunction, Middleware } from 'express';
+import { Response, Request, NextFunction } from 'express';
 
 /*
  * NOTE: To handle any complex errors, please use a central
@@ -15,7 +15,7 @@ export default [
    * however its good to have a backup
    */
   // eslint-disable-next-line no-unused-vars
-  function notFoundMiddlware(req: $Request, res: $Response, next: NextFunction) {
+  function notFoundMiddlware(req: Request, res: Response, next: NextFunction) {
     res.send(createError(404, 'Sorry, that resource was not found.'));
   },
 
@@ -25,12 +25,7 @@ export default [
    * NOTE: You must provide specify all 4 parameters on this callback function
    * even if they aren't used, otherwise it won't be used.
    */
-  function unexpectedErrorMiddleware(
-    err?: Error,
-    req: $Request,
-    res: $Response,
-    next: NextFunction,
-  ): Middleware {
+  function unexpectedErrorMiddleware(err: Error, req: Request, res: Response, next: NextFunction) {
     if (err) {
       next(
         createError(500, err.toString(), {

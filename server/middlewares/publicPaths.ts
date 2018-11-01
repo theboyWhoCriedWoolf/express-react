@@ -1,11 +1,15 @@
-// @flow
-import path from 'path';
-import express, { type $Application } from 'express';
+import * as path from 'path';
+import * as express from 'express';
 
 import { EMPTY_OBJECT } from '../utils';
 import config from '../../config';
 
-export default function publicPaths(app: $Application, options?: Object = EMPTY_OBJECT) {
+import { IMiddlewareOptions } from './types';
+
+export default function publicPaths(
+  app: express.Application,
+  options: IMiddlewareOptions = EMPTY_OBJECT,
+) {
   const publicPath = options.publicPath || '/';
   const outputPath = options.outputPath || path.resolve(process.cwd(), 'build/client');
 

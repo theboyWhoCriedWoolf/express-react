@@ -1,14 +1,13 @@
-// @flow
+import { Application } from 'express';
 
-import type { $Application } from 'express';
+import initialisePublicPaths from './middlewares/publicPaths';
 import initialiseGlobalMiddleware from './middlewares';
 import initialiseRoutes from './routes';
 import initialiseFrontEnd from './middlewares/frontendMiddleware';
 import initialiseGlobalErrorMiddleware from './middlewares/errorHandlers';
-import initialisePublicPaths from './middlewares/assetPaths';
 import { EMPTY_OBJECT } from './utils';
 
-export default function bootStrap(app: $Application, options?: Object = EMPTY_OBJECT) {
+export default function bootStrap(app: Application, options: object = EMPTY_OBJECT) {
   // Don't expose any software information to potential hackers.
   app.disable('x-powered-by');
 

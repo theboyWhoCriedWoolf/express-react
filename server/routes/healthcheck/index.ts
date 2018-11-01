@@ -1,16 +1,14 @@
-// @flow
-import express, { type Router } from 'express';
+import * as express from 'express';
 
 import getController from './get.controller';
 
-const router: Router = express.Router();
-
+const router = express.Router();
 // route paths
-const paths: { [string]: string } = {
+const paths: { [key: string]: string } = {
   index: '/healthcheck',
 };
 
-export default function healthecheckRoutes() {
+export default function healthecheckRoutes(): express.Router {
   // get healthcheck
   router.get(paths.index, getController);
 

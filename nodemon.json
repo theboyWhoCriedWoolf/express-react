@@ -1,0 +1,6 @@
+{
+  "watch": ["server"],
+  "ext": "ts",
+  "ignore": ["**/*.test.{js,ts}", "node_modules"],
+  "exec": "ts-node --compilerOptions ./overrides.config.json "
+}

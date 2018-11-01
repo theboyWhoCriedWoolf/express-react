@@ -1,6 +1,7 @@
-const { number, string, resolveApp } = require('./helpers');
+// tslint:disable-next-line:no-var-requires
+import { number, string, resolveApp } from './helpers';
 
-module.exports = {
+export default {
   // The port on which the server should run.
   port: number('PORT', 3000),
   // The host on which the server should run.

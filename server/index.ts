@@ -1,5 +1,4 @@
-// @flow
-import express, { type $Application } from 'express';
+import express, { Application } from 'express';
 
 import config from '../config';
 import createServer from './createServer';
@@ -7,7 +6,7 @@ import bootstrap from './bootstrap';
 import { log, prettyError, appStarted, normalizePort } from './utils';
 
 // error handling code
-['uncaughtException', 'unhandledRejection'].forEach(sig => {
+['uncaughtException', 'unhandledRejection'].forEach((sig: any) => {
   process.on(sig, error => {
     log.error(`${sig}: $ ${prettyError.render(error)}`);
     process.exit(1);
@@ -15,9 +14,9 @@ import { log, prettyError, appStarted, normalizePort } from './utils';
 });
 
 async function start() {
-  const app: $Application = express();
-  const port: number = normalizePort(config.get('port'));
-  const host: string = config.get('host');
+  const app: Application = express();
+  const port: string | number = normalizePort(config.get('port')) || 3000;
+  const host: any = config.get('host');
 
   bootstrap(app, {
     outputPath: config.get('bundles.client.outputPath'),
@@ -26,9 +25,10 @@ async function start() {
 
   const { server, https } = createServer(app, config.get('slCertificates'));
 
+  log.info('-------- ehllo world ');
+
   // Start your app.
-  // eslint-disable-next-line consistent-return
-  server.listen(port, host, async err => {
+  server.listen(port, host, async (err: Error) => {
     if (err) {
       return log.error(err.message);
     }

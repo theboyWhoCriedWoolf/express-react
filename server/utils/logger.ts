@@ -1,11 +1,10 @@
-// @flow
-import winston from 'winston';
+import * as winston from 'winston';
 
 /**
  * Setup logger
  * @return {object} logger
  */
-export default (() => {
+export default ((): winston.Logger => {
   const { createLogger, transports, format } = winston;
   const { combine, colorize, simple, splat } = format;
 
@@ -19,7 +18,7 @@ export default (() => {
     silly: 'magenta',
   });
 
-  const logger = createLogger({
+  const logger: winston.Logger = createLogger({
     format: combine(colorize(), splat(), simple()),
     transports: [new transports.Console()],
   });

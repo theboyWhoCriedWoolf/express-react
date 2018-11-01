@@ -1,14 +1,13 @@
-// @flow
-import cors from 'cors';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import compression from 'compression';
 import logger from 'morgan';
-import type { $Application } from 'express';
+import { Application } from 'express';
 
 import security from './security';
-import correlationId from './correlationMiddleware';
+import correlationMiddleware from './correlationIdMiddleware';
 
-export default function middleware(app: $Application) {
+export default function middleware(app: Application) {
   // add development logging
   app.use(logger('dev'));
 
@@ -27,5 +26,5 @@ export default function middleware(app: $Application) {
   // and other good practices on official Express.js docs http://mxs.is/googmy
   app.use(compression());
 
-  app.use(correlationId);
+  app.use(correlationMiddleware);
 }

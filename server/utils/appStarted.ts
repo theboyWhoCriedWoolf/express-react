@@ -1,8 +1,7 @@
-// @flow
-import ip from 'ip';
+import * as ip from 'ip';
 import chalk from 'chalk';
 
-export default function appStarted(port: number, host: string, https?: boolean) {
+export default function appStarted(port: number | string, host: number | string, https?: boolean) {
   const divider = chalk.gray('\n-----------------------------------');
   const protocol = https ? 'https' : 'http';
 

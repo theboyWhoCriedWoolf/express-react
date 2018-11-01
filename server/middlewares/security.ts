@@ -1,13 +1,16 @@
-// @flow
-import type { $Request, $Response, NextFunction } from 'express';
+import hpp from 'hpp';
 import uuid from 'uuid';
 import helmet from 'helmet';
 import cookieSession from 'cookie-session';
-import hpp from 'hpp';
+import { Request, Response, NextFunction } from 'express';
 
 import config from '../../config';
+import { ICspOverrides, ICsp } from './types';
 
-const cspConfig: Object = {
+/**
+ * configure csp
+ */
+const cspConfig: ICsp = {
   directives: {
     childSrc: ["'self'"],
     // IF you want to disable all external HTTP calls
@@ -30,7 +33,7 @@ const cspConfig: Object = {
       // This is useful for guarding your application whilst allowing an inline
       // script to do data store rehydration (redux/mobx/apollo) for example.
       // @see https://helmetjs.github.io/docs/csp/
-      (req: $Request, res: $Response) => `'nonce-${String(res.locals.nonce)}'`,
+      (req: Request, res: Response) => `'nonce-${res.locals.nonce}'`,
       // This is a know workaround for browsers that don't support nonces.
       // It will be ignored by browsers that do support nonces as they will
       // recognise that we have also provided a nonce configuration and
@@ -48,17 +51,18 @@ const cspConfig: Object = {
 
 /* eslint-disable security/detect-object-injection */
 // Add any additional CSP from the static config.
-const cspExtensions: Object = config.get('cspExtensions');
+const cspExtensions: ICspOverrides = config.get('cspExtensions');
 Object.keys(cspExtensions).forEach(key => {
   if (cspConfig.directives[key]) {
-    cspConfig.directives[key] = cspConfig.directives[key].concat(cspExtensions[key]);
+    cspConfig.directives[key] = (cspConfig.directives[key] as string[]).concat(cspExtensions[key]);
   } else {
     cspConfig.directives[key] = cspExtensions[key];
   }
 });
+
 /* eslint-enable security/detect-object-injection */
 
-function nonceMiddleware(req: $Request, res: $Response, next: NextFunction) {
+function nonceMiddleware(req: Request, res: Response, next: NextFunction) {
   // eslint-disable-next-line no-param-reassign
   res.locals.nonce = uuid.v4();
   next();
